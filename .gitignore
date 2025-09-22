@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+*.local
+
+# Editor / OS files
+.vscode/
+.DS_Store
+Thumbs.db
