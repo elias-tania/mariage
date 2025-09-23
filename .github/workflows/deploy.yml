@@ -3,7 +3,10 @@ name: Deploy Vue app to GitHub Pages
 on:
   push:
     branches:
-      - main  # déploiement automatique quand tu pushes sur main
+      - main
+
+permissions:
+  contents: write   # ✅ donne le droit d'écrire dans le repo
 
 jobs:
   build-deploy:
