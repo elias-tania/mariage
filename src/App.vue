@@ -1,6 +1,7 @@
 <template>
   <div class="site">
     <Header />
+    <ClustersList />
 
     <main class="container">
       <section class="hero">
@@ -27,12 +28,13 @@
 </template>
 
 <script>
+import ClustersList from './components/ClustersList.vue';
 import Header from './components/Header.vue'
 import RegisterForm from './components/RegisterForm.vue'
 import RegistryCard from './components/RegistryCard.vue'
 
 export default {
   name: 'App',
-  components: { Header, RegisterForm, RegistryCard }
+  components: { Header, RegisterForm, RegistryCard, ClustersList }
 }
 </script>
