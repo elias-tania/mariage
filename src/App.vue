@@ -1,7 +1,7 @@
 <template>
   <div class="site">
     <Header />
-    <ClustersList />
+    <FirebaseViewer />
 
     <main class="container">
       <section class="hero">
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import ClustersList from './components/ClustersList.vue';
+import FirebaseViewer from './components/FirebaseViewer.vue';
 import Header from './components/Header.vue'
 import RegisterForm from './components/RegisterForm.vue'
 import RegistryCard from './components/RegistryCard.vue'
 
 export default {
   name: 'App',
-  components: { Header, RegisterForm, RegistryCard, ClustersList }
+  components: { Header, RegisterForm, RegistryCard, FirebaseViewer }
 }
 </script>
