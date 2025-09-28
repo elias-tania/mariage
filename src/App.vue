@@ -1,40 +1,46 @@
 <template>
   <div class="site">
     <Header />
-    <FirebaseViewer />
-
     <main class="container">
-      <section class="hero">
-        <div class="hero-content">
-          <h1>Vous êtes invité·e</h1>
-          <p>Nous serions ravis de vous compter parmi nous pour célébrer avec nous. Merci de confirmer votre présence grâce au formulaire ci dessous</p>
-          <a class="btn" href="#inscription">Répondre</a>
-        </div>
-        <div class="hero-side">
-          <RegistryCard />
-        </div>
-      </section>
-
-      <section id="inscription" class="form-section">
-        <h2>Formulaire d'inscription</h2>
-        <RegisterForm />
-      </section>
-
-      <footer class="footer">
-        <p>Avec amour — <strong>Les futurs mariés</strong></p>
-      </footer>
+      <RouterView />
     </main>
+    <footer class="footer">
+      <p>Avec amour — <strong>Les futurs mariés</strong></p>
+    </footer>
   </div>
 </template>
 
 <script>
-import FirebaseViewer from './components/FirebaseViewer.vue';
 import Header from './components/Header.vue'
-import RegisterForm from './components/RegisterForm.vue'
-import RegistryCard from './components/RegistryCard.vue'
+import { RouterView, useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
 
 export default {
   name: 'App',
-  components: { Header, RegisterForm, RegistryCard, FirebaseViewer }
+  components: { Header, RouterView },
+
+  setup() {
+    const page = ref(null)
+    const router = useRouter() // <-- accède au router pour rediriger
+
+    const updatePage = () => {
+      const params = new URLSearchParams(window.location.search)
+      page.value = params.get('page')
+
+      if (page.value) {
+        // Redirige vers la route correspondante, par exemple '/admin'
+        router.push(`/${page.value}`).catch(() => {}) 
+        // catch pour éviter les erreurs si la route est la même
+      }
+    }
+
+    onMounted(() => {
+      updatePage()
+      // Pour gérer les changements d'URL avec les boutons du navigateur
+      window.addEventListener('popstate', updatePage)
+    })
+
+    return { page }
+  }
 }
 </script>

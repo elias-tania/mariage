@@ -9,7 +9,7 @@
     </div>
     <nav class="nav">
       <a href="#inscription">S'inscrire</a>
-      <a href="#details">Details</a>
+      <router-link to="/admin">Admin</router-link>
     </nav>
   </header>
 </template>
