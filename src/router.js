@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './components/Home.vue'        // ta page principale
 import Admin from './components/Admin.vue'  // la future page admin
+import Inscription from './components/Inscription.vue'
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/admin', component: Admin }
+  { path: '/admin', component: Admin },
+  { path: '/inscription', component: Inscription }
 ]
 
 const router = createRouter({

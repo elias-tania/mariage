@@ -1,7 +1,7 @@
 <template>
   <div class="site">
     <Header />
-    <main class="container">
+    <main>
       <RouterView />
     </main>
     <footer class="footer">

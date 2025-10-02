@@ -1,34 +1,16 @@
 <template>
-  <form class="card form" @submit.prevent="handleSubmit">
+  <form class="form" @submit.prevent="handleSubmit">
     <!-- Sélection du nom ou "Autre" -->
     <label>
       Nom
-      <select v-model="selectedName" required>
-        <option v-for="p in participants" :key="p" :value="p">{{ p }}</option>
-        <option value="other">Autre</option>
-      </select>
+      <input type="text" v-model="selectedName" list="participants-list" required>
+      </input>
+      <datalist id="participants-list">
+        <option v-for="p in participants" :key="p" :value="p"></option>
+      </datalist>
     </label>
 
-    <!-- Si "Autre" est sélectionné -->
-    <div v-if="selectedName === 'other'">
-      <label>
-        Votre nom complet
-        <input v-model="form.name" placeholder="Nom complet" required />
-      </label>
-
-      <label>
-        Personne affiliée dans la liste
-        <select v-model="form.affiliation" required>
-          <option value="" disabled>Choisissez une personne</option>
-          <option v-for="p in participants" :key="p" :value="p">{{ p }}</option>
-        </select>
-      </label>
-
-      <label>
-        Message obligatoire
-        <textarea v-model="form.customMessage" placeholder="Un petit mot..." required />
-      </label>
-    </div>
+    
 
     <label>
       Présence
@@ -39,14 +21,24 @@
     </label>
 
     <div v-if="form.attending === 'yes'">
+      <!-- Si "Autre" est sélectionné -->
+    <div v-if="!participants.includes(selectedName) && selectedName!=''">
       <label>
-        Je serai présent durant
-        <div class="checkbox">
-          <input v-model="form.ceremonie" type="checkbox" /> La cérémonie
-          <input v-model="form.repas" type="checkbox" /> Le repas
-        </div>
+        Je viendrai avec
+        <select v-model="form.affiliation">
+          <option value="" disabled>Choisissez une personne</option>
+          <option v-for="p in participants" :key="p" :value="p">{{ p }}</option>
+        </select>
       </label>
-
+    </div>
+      <label class="checkbox">
+        <input type="checkbox" v-model="form.ceremonie" /> 
+        A La cérémonie
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" v-model="form.repas" /> 
+        <div>Au repas</div>
+      </label>
       <label>
         Menu (préférence)
         <select v-model="form.menu">
@@ -57,7 +49,7 @@
 
       <label>
         Allergies (optionnel)
-        <textarea v-model="form.allergies" placeholder="Notez si vous avez des allergies ou des choses que vous ne pouvez pas manger." />
+        <textarea v-model="form.allergies" placeholder="Notez si vous avez des allergies ou des choses que vous ne pouvez pas manger."></textarea>
       </label>
     </div>
 
@@ -97,8 +89,13 @@ export default {
   methods: {
     async handleSubmit() {
       // Validation si "Autre"
-      if (this.selectedName === 'other' && (!this.form.name || !this.form.affiliation || !this.form.customMessage.trim())) {
-        this.status = "❌ Merci de remplir votre nom, la personne affiliée et un message."
+      if (this.selectedName === 'other' && !this.form.name) {
+        this.status = "Tu n'as pas indiqué ton nom."
+        return
+      }
+
+      if (this.selectedName === 'other' && !this.form.affiliation) {
+        this.status = "Tu as oublier de nous dire la personne que tu acompagnes"
         return
       }
 
@@ -124,13 +121,13 @@ export default {
           throw new Error("Erreur serveur " + response.status)
         }
 
-        this.status = "✅ Merci, votre réponse a été enregistrée !"
+        this.status = "✅ Merci, " + this.selectedName + " votre réponse a été enregistrée !"
 
         // Réinitialiser le formulaire
         this.selectedName = ""
         this.form = {
           name: "",
-          attending: "yes",
+          attending: "no",
           ceremonie: false,
           repas: false,
           menu: "standard",
