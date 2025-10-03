@@ -1,58 +1,96 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-xl font-bold mb-2">📋 Liste des réponses</h2>
+  <div class="responses-container">
+    <h2>📋 Liste des inscriptions</h2>
 
-    <div v-if="loading">⏳ Chargement...</div>
-    <div v-else-if="error" class="text-red-500">{{ error }}</div>
+    <!-- Filtres -->
+    <div class="filters">
+      <input
+        type="text"
+        v-model="searchName"
+        placeholder="Filtrer par nom..."
+      />
+      <select v-model="filterAttending">
+        <option value="">Tous</option>
+        <option value="yes">Viendra</option>
+        <option value="no">Ne viendra pas</option>
+      </select>
+    </div>
 
-    <ul v-else class="space-y-2">
-      <li
-        v-for="(response, key) in responses"
-        :key="key"
-        class="border p-2 rounded"
-      >
-        <strong>{{ response.name }}</strong>
-        <span v-if="response.attending === 'yes'"> ✅ viendra</span>
-        <span v-else> ❌ ne viendra pas</span>
-        <br />
+    <!-- Tableau -->
+    <table class="responses-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Présence</th>
+          <th>Avec</th>
+          <th>Cérémonie</th>
+          <th>Repas</th>
+          <th>Menu</th>
+          <th>Allergies</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(response, key) in filteredResponses"
+          :key="key"
+        >
+          <td>{{ response.name }}</td>
+          <td>
+            <span v-if="response.attending === 'yes'">✅</span>
+            <span v-else>❌</span>
+          </td>
+          <td>{{ response.affiliation || '-' }}</td>
+          <td>
+            <span v-if="response.ceremonie">🎉</span>
+          </td>
+          <td>
+            <span v-if="response.repas">🍽</span>
+          </td>
+          <td>{{ response.menu }}</td>
+          <td>{{ response.allergies || '-' }}</td>
+          <td>{{ response.message || '-' }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-        <span v-if="response.ceremonie">🎉 Cérémonie</span>
-        <span v-if="response.repas"> 🍽 Repas</span>
-        <br />
-
-        <span>Menu : {{ response.menu }}</span><br />
-
-        <span v-if="response.allergies">
-          ⚠️ Allergies : {{ response.allergies }}
-        </span>
-        <br />
-
-        <span v-if="response.message">
-          💌 Message : {{ response.message }}
-        </span>
-      </li>
-    </ul>
+    <div v-if="loading" class="loading">⏳ Chargement...</div>
+    <div v-if="error" class="error">{{ error }}</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "FireBaseViewer",
+  name: "ResponsesTable",
   data() {
     return {
-      responses: {},
+      responses: [],
       loading: true,
-      error: null
+      error: null,
+      searchName: "",
+      filterAttending: ""
+    }
+  },
+  computed: {
+    filteredResponses() {
+      return this.responses.filter(r => {
+        const matchesName = r.name.toLowerCase().includes(this.searchName.toLowerCase())
+        const matchesAttending = this.filterAttending
+          ? r.attending === this.filterAttending
+          : true
+        return matchesName && matchesAttending
+      })
     }
   },
   async mounted() {
     try {
-      var base_url = import.meta.env.VITE_BASE_URL
+      const base_url = import.meta.env.VITE_BASE_URL
       const res = await fetch(base_url)
       if (!res.ok) throw new Error("Erreur réseau " + res.status)
 
       const data = await res.json()
-      this.responses = data || {}
+      // Si c’est un objet, on transforme en tableau
+      this.responses = Array.isArray(data) ? data : Object.values(data)
     } catch (err) {
       this.error = err.message
     } finally {

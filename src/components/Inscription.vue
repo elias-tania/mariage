@@ -1,6 +1,4 @@
 <template>
-  
-
     <RegisterForm />
 </template>
 
