@@ -13,21 +13,28 @@
 
 <script>
 import Carousel from './Carousel.vue';
-
+import IMG3952 from '../assets/IMG_3952.jpg';
+import IMG3977 from '../assets/IMG_3977.jpg';
+import IMG3991 from '../assets/IMG_3991.jpg';
+import IMG3995 from '../assets/IMG_3995.jpg';
+import IMG4034 from '../assets/IMG_4034.jpg';
+import IMG4042 from '../assets/IMG_4042.jpg';
+import IMG4048 from '../assets/IMG_4048.jpg';
+import IMG4083 from '../assets/IMG_4083.jpg';
 export default {
   name: 'Home',
   components: { Carousel },
   data() {
     return {
       carouselImages: [
-        "/src/assets/IMG_3952.jpg",
-        "/src/assets/IMG_3977.jpg",
-        "/src/assets/IMG_3991.jpg",
-        "/src/assets/IMG_3995.jpg",
-        "/src/assets/IMG_4034.jpg",
-        "/src/assets/IMG_4042.jpg",
-        "/src/assets/IMG_4048.jpg",
-        "/src/assets/IMG_4083.jpg"
+         IMG3952,
+          IMG3977,
+          IMG3991,
+          IMG3995,
+          IMG4034,
+          IMG4042,
+          IMG4048,
+          IMG4083,
       ]
     };
   }
