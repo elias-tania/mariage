@@ -1,16 +1,19 @@
 <template>
   <form class="form" @submit.prevent="handleSubmit">
-    <!-- Sélection du nom ou "Autre" -->
+    <!-- Sélection du nom -->
     <label>
       Nom
-      <input type="text" v-model="selectedName" list="participants-list" required>
-      </input>
+      <input
+        type="text"
+        v-model="selectedName"
+        list="participants-list"
+        @input="fetchByName"
+        required
+      />
       <datalist id="participants-list">
         <option v-for="p in participants" :key="p" :value="p"></option>
       </datalist>
     </label>
-
-    
 
     <label>
       Présence
@@ -21,24 +24,26 @@
     </label>
 
     <div v-if="form.attending === 'yes'">
-      <!-- Si "Autre" est sélectionné -->
-    <div v-if="!participants.includes(selectedName) && selectedName!=''">
-      <label>
-        Je viendrai avec
-        <select v-model="form.affiliation">
-          <option value="" disabled>Choisissez une personne</option>
-          <option v-for="p in participants" :key="p" :value="p">{{ p }}</option>
-        </select>
-      </label>
-    </div>
+      <div v-if="!participants.includes(selectedName) && selectedName !== ''">
+        <label>
+          Je viendrai avec
+          <select v-model="form.affiliation">
+            <option value="" disabled>Choisissez une personne</option>
+            <option v-for="p in participants" :key="p" :value="p">{{ p }}</option>
+          </select>
+        </label>
+      </div>
+
       <label class="checkbox">
-        <input type="checkbox" v-model="form.ceremonie" /> 
-        A La cérémonie
+        <input type="checkbox" v-model="form.ceremonie" />
+        À la cérémonie
       </label>
+
       <label class="checkbox">
-        <input type="checkbox" v-model="form.repas" /> 
-        <div>Au repas</div>
+        <input type="checkbox" v-model="form.repas" />
+        Au repas
       </label>
+
       <label>
         Menu (préférence)
         <select v-model="form.menu">
@@ -49,7 +54,10 @@
 
       <label>
         Allergies (optionnel)
-        <textarea v-model="form.allergies" placeholder="Notez si vous avez des allergies ou des choses que vous ne pouvez pas manger."></textarea>
+        <textarea
+          v-model="form.allergies"
+          placeholder="Notez vos allergies ou restrictions alimentaires"
+        ></textarea>
       </label>
     </div>
 
@@ -72,9 +80,10 @@ export default {
         "Anais Gajo", "Andrea Gajo", "Daniela Olivera", "Marie Gajo",
         "Laura Tripiciano-Leo", "Jacopo Tripiciano-Leo",
       ],
+      responses: [],
       selectedName: "",
       form: {
-        name: "", // utilisé si "Autre"
+        name: "",
         attending: "no",
         ceremonie: false,
         repas: false,
@@ -88,26 +97,19 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      // Validation si "Autre"
-      if (this.selectedName === 'other' && !this.form.name) {
+      if (!this.selectedName) {
         this.status = "Tu n'as pas indiqué ton nom."
         return
       }
 
-      if (this.selectedName === 'other' && !this.form.affiliation) {
-        this.status = "Tu as oublier de nous dire la personne que tu acompagnes"
+      if (!this.participants.includes(this.selectedName) && !this.form.affiliation) {
+        this.status = "Tu as oublié de nous dire la personne que tu accompagnes."
         return
       }
 
       this.status = "⏳ Envoi en cours..."
 
-      const payload = { ...this.form }
-
-      if (this.selectedName !== 'other') {
-        payload.name = this.selectedName
-        payload.affiliation = null
-        payload.customMessage = null
-      }
+      const payload = { ...this.form, name: this.selectedName }
 
       try {
         const base_url = import.meta.env.VITE_BASE_URL
@@ -117,15 +119,12 @@ export default {
           body: JSON.stringify(payload)
         })
 
-        if (!response.ok) {
-          throw new Error("Erreur serveur " + response.status)
-        }
+        if (!response.ok) throw new Error("Erreur serveur " + response.status)
 
-        this.status = "✅ Merci, " + this.selectedName + " votre réponse a été enregistrée !"
+        this.status = `✅ Merci, ${this.selectedName}, votre réponse a été enregistrée !`
 
-        // Réinitialiser le formulaire
         this.selectedName = ""
-        this.form = {
+        Object.assign(this.form, {
           name: "",
           attending: "no",
           ceremonie: false,
@@ -134,10 +133,54 @@ export default {
           allergies: "",
           affiliation: "",
           customMessage: ""
-        }
+        })
       } catch (err) {
         this.status = "❌ Une erreur est survenue : " + err.message
       }
+    },
+
+    /** Remplissage automatique du formulaire depuis la DB **/
+    fetchByName() {
+      const guest = this.responses.findLast(el => el.name === this.selectedName)
+
+      if (!guest) {
+        // reset propre (réactif)
+        Object.assign(this.form, {
+          name: "",
+          attending: "no",
+          ceremonie: false,
+          repas: false,
+          menu: "standard",
+          allergies: "",
+          affiliation: "",
+          customMessage: ""
+        })
+        return
+      }
+
+      // Remplit chaque champ de manière réactive
+      Object.assign(this.form, {
+        name: guest.name || "",
+        attending: guest.attending || "no",
+        ceremonie: !!guest.ceremonie,
+        repas: !!guest.repas,
+        menu: guest.menu || "standard",
+        allergies: guest.allergies || "",
+        affiliation: guest.affiliation || "",
+        customMessage: guest.customMessage || ""
+      })
+    }
+  },
+
+  async mounted() {
+    try {
+      const base_url = import.meta.env.VITE_BASE_URL
+      const res = await fetch(base_url)
+      if (!res.ok) throw new Error("Erreur réseau " + res.status)
+      const data = await res.json()
+      this.responses = Array.isArray(data) ? data : Object.values(data)
+    } catch (err) {
+      this.status = "Erreur de chargement : " + err.message
     }
   }
 }
