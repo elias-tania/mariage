@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import ComboBox from "./ComboBox.vue"
+import ComboBox from './ComboBox.vue'
 
 export default {
   name: "RegisterForm",
@@ -74,10 +74,9 @@ export default {
   data() {
     return {
       participants: [
-        "Laurent Gajo", "Anne-Lise Gajo", "Roberto Tripiciano", "Corinne Tripiciano",
-        "Matthias Gajo", "Coraline Gajo", "Elyo Gajo", "Nicolas Gajo",
-        "Anais Gajo", "Andrea Gajo", "Daniela Olivera", "Marie Gajo",
-        "Laura Tripiciano-Leo", "Jacopo Tripiciano-Leo",
+        "Elias Gajo", "Anne-Lise Gajo", "Anais Gajo", "Marie Gajo", "Nicolas Gajo", "Andrea Gajo", "Matthias Gajo", "Corinne Tripiciano", "Laura Tripiciano Leo", "Daniel Crot", "Sébastien Crot", "Eliasabeth Crot", "Chloé Leibundgut", "Jeremy Leibundgut", "Romain Gajo", "Adrien Gajo", "Joyce Ducommun", "Whitney Ducommun", "Bastien Gajo", "Mylena Gajo", "Caroline Tripiciano", "Luca Auteri", "Gabriel Ciullo", "Vincet Tripiciano", "Stefano Tripiciano", "Sandra Tripiciano", "Alain Praz", "Laurent Praz", "Leticia Praz", "Santa Tripiciano", "Madeleine Praz", "Michel Crot", "Lino Gajo", "Damien Bousquet", "Eliot Bovey", "Stéphane Borel", "Melika Borel", "Constantin Bacha", "Floriane Bacha", "Nora Bacha", "Antonio Di Dio", "Davide Di Dio", "Noemi Di Dio", "Marco Bearzi", "Martine Monney", "Eleonore Fleury", "Yasmin Koubaa", "Coralie Amez-Droz", "Luca Meyer", "Matthieu Volet", "Sylvie Gonçalves", "Diana Gonçalves", "Catia Niderhauser", "Cédric Niderhauser", "Danny Niderhauser", "Typhanie Niderhauser", "Dereck Crevoisier", "Morgan Crevoisier", "Bryan Crevoisier", "Philipe Crevoisier", "Clara Gajo", "Carmela Sgrò", "Remo Sgrò", "Pippo Sgrò", "Marlyse Reith",
+        "Tania Tripiciano", "Laurent Gajo", "Daniela Oliveira", "Coraline Gajo", "Roberto Tripiciano", "Jacopo Tripiciano Leo", "Chantal Crot", "Julie (copine de Sébastien)", "Micheline Ducommun", "Luigi Auteri", "Giada (copine de Luca)", "Joëlle (copine de Gabriel)", "Loris Tripiciano", "Claudia Tripiciano", "Hugo Martinez", "Anna Praz", "Christiane Praz", "Nick (copain de Leticia)", "Edith Crot", "Malou (copine de Lino)", "Masha (copine de Damien)", "Antonietta Di Dio", "Léa (copine de Davide)", "Elba Xheladini", "-", "Aurélie Volet", "Loic (copain de Sylvie)", "Quentin (copain de Diana)", "Pierrick Niderhauser", "Viviane Crevoisier",
+        "Elyo Gajo", "Valentina (enfant de Stefano et Claudia)", "Leandro Martinez", "Santiago Martinez", "Julie (enfant de Leticia et Nick)", "Aquilian (enfant de Noemie et Elba)", "Jade (enfant de Matthieu et Aurelie)"
       ],
       responses: [],
       selectedName: "",
@@ -120,7 +119,10 @@ export default {
 
         if (!response.ok) throw new Error("Erreur serveur " + response.status)
 
-        this.status = `✅ Merci, ${this.selectedName}, votre réponse a été enregistrée !`
+        this.status = `✅ Merci, ${this.selectedName}`
+
+        const successMessage = `✅ Merci ${this.selectedName} ! ta réponse a bien été enregistrée !`
+        this.$router.push({ path: "/", query: { message: successMessage } })
 
         this.selectedName = ""
         Object.assign(this.form, {
@@ -133,6 +135,9 @@ export default {
           affiliation: "",
           customMessage: ""
         })
+
+       
+
       } catch (err) {
         this.status = "❌ Une erreur est survenue : " + err.message
       }

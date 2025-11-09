@@ -5,6 +5,9 @@
     <Carousel class="home-image" :images="carouselImages"/>
     <div class="container"> 
       <h3>Vous êtes invité.e</h3>
+      <p v-if="$route.query.message" class="status">
+        {{ $route.query.message }}
+      </p>
       <p>Nous serions ravis de vous compter parmi nous le jour J. Merci de nous confirmer votre présence grâce au lien ci dessous</p>
       <router-link to="/inscription" class="btn"> S'inscrire</router-link>
     </div>
