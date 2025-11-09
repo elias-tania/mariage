@@ -42,12 +42,12 @@
           </td>
           <td>{{ response.affiliation || '-' }}</td>
           <td>
-            <span v-if="response.ceremonie">🎉</span>
+            <span v-if="response.ceremonie">✅</span>
           </td>
           <td>
-            <span v-if="response.repas">🍽</span>
+            <span v-if="response.repas">✅</span>
           </td>
-          <td>{{ response.menu }}</td>
+          <td><span v-if="response.noViande">❌</span>🥩 | <span v-if="response.noPoisson">❌</span>🐟</td>
           <td>{{ response.allergies || '-' }}</td>
           <td>{{ response.message || '-' }}</td>
         </tr>

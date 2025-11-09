@@ -14,7 +14,7 @@ export default {
     },
     interval: {
       type: Number,
-      default: 10000 // 3 secondes
+      default: 2500
     }
   },
   data() {

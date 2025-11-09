@@ -41,11 +41,17 @@
       </label>
 
       <label>
-        Menu (préférence)
-        <select v-model="form.menu">
-          <option value="standard">Standard</option>
-          <option value="vegetarian">Végétarien</option>
-        </select>
+        Menu
+      </label>
+      
+      <label class="checkbox">
+        <input type="checkbox" v-model="form.noViande" />
+        Je ne mange pas de viande
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" v-model="form.noPoisson" />
+        Je ne mange pas de poisson
       </label>
 
       <label>
@@ -74,9 +80,7 @@ export default {
   data() {
     return {
       participants: [
-        "Elias Gajo", "Anne-Lise Gajo", "Anais Gajo", "Marie Gajo", "Nicolas Gajo", "Andrea Gajo", "Matthias Gajo", "Corinne Tripiciano", "Laura Tripiciano Leo", "Daniel Crot", "Sébastien Crot", "Eliasabeth Crot", "Chloé Leibundgut", "Jeremy Leibundgut", "Romain Gajo", "Adrien Gajo", "Joyce Ducommun", "Whitney Ducommun", "Bastien Gajo", "Mylena Gajo", "Caroline Tripiciano", "Luca Auteri", "Gabriel Ciullo", "Vincet Tripiciano", "Stefano Tripiciano", "Sandra Tripiciano", "Alain Praz", "Laurent Praz", "Leticia Praz", "Santa Tripiciano", "Madeleine Praz", "Michel Crot", "Lino Gajo", "Damien Bousquet", "Eliot Bovey", "Stéphane Borel", "Melika Borel", "Constantin Bacha", "Floriane Bacha", "Nora Bacha", "Antonio Di Dio", "Davide Di Dio", "Noemi Di Dio", "Marco Bearzi", "Martine Monney", "Eleonore Fleury", "Yasmin Koubaa", "Coralie Amez-Droz", "Luca Meyer", "Matthieu Volet", "Sylvie Gonçalves", "Diana Gonçalves", "Catia Niderhauser", "Cédric Niderhauser", "Danny Niderhauser", "Typhanie Niderhauser", "Dereck Crevoisier", "Morgan Crevoisier", "Bryan Crevoisier", "Philipe Crevoisier", "Clara Gajo", "Carmela Sgrò", "Remo Sgrò", "Pippo Sgrò", "Marlyse Reith",
-        "Tania Tripiciano", "Laurent Gajo", "Daniela Oliveira", "Coraline Gajo", "Roberto Tripiciano", "Jacopo Tripiciano Leo", "Chantal Crot", "Julie (copine de Sébastien)", "Micheline Ducommun", "Luigi Auteri", "Giada (copine de Luca)", "Joëlle (copine de Gabriel)", "Loris Tripiciano", "Claudia Tripiciano", "Hugo Martinez", "Anna Praz", "Christiane Praz", "Nick (copain de Leticia)", "Edith Crot", "Malou (copine de Lino)", "Masha (copine de Damien)", "Antonietta Di Dio", "Léa (copine de Davide)", "Elba Xheladini", "-", "Aurélie Volet", "Loic (copain de Sylvie)", "Quentin (copain de Diana)", "Pierrick Niderhauser", "Viviane Crevoisier",
-        "Elyo Gajo", "Valentina (enfant de Stefano et Claudia)", "Leandro Martinez", "Santiago Martinez", "Julie (enfant de Leticia et Nick)", "Aquilian (enfant de Noemie et Elba)", "Jade (enfant de Matthieu et Aurelie)"
+        "Elias Gajo", "Anne-Lise Gajo", "Anais Gajo", "Marie Gajo", "Nicolas Gajo", "Andrea Gajo", "Matthias Gajo", "Corinne Tripiciano", "Laura Tripiciano Leo", "Daniel Crot", "Sébastien Crot", "Eliasabeth Crot", "Chloé Leibundgut", "Jeremy Leibundgut", "Romain Gajo", "Adrien Gajo", "Joyce Ducommun", "Whitney Ducommun", "Bastien Gajo", "Mylena Gajo", "Caroline Tripiciano", "Luca Auteri", "Gabriel Ciullo", "Vincet Tripiciano", "Stefano Tripiciano", "Sandra Tripiciano", "Alain Praz", "Laurent Praz", "Leticia Praz", "Santa Tripiciano", "Madeleine Praz", "Michel Crot", "Lino Gajo", "Damien Bousquet", "Eliot Bovey", "Stéphane Borel", "Melika Borel", "Constantin Bacha", "Floriane Bacha", "Nora Bacha", "Antonio Di Dio", "Davide Di Dio", "Noemi Di Dio", "Marco Bearzi", "Martine Monney", "Eleonore Fleury", "Yasmin Koubaa", "Coralie Amez-Droz", "Luca Meyer", "Matthieu Volet", "Sylvie Gonçalves", "Diana Gonçalves", "Catia Niderhauser", "Cédric Niderhauser", "Danny Niderhauser", "Typhanie Niderhauser", "Dereck Crevoisier", "Morgan Crevoisier", "Bryan Crevoisier", "Philipe Crevoisier", "Clara Gajo", "Carmela Sgrò", "Remo Sgrò", "Pippo Sgrò", "Marlyse Reith", "Tania Tripiciano", "Laurent Gajo", "Daniela Oliveira", "Coraline Gajo", "Roberto Tripiciano", "Jacopo Tripiciano Leo", "Chantal Crot", "Julie (copine de Sébastien)", "Micheline Ducommun", "Luigi Auteri", "Giada (copine de Luca)", "Joëlle (copine de Gabriel)", "Loris Tripiciano", "Claudia Tripiciano", "Hugo Martinez", "Anna Praz", "Christiane Praz", "Nick (copain de Leticia)", "Edith Crot", "Malou (copine de Lino)", "Masha (copine de Damien)", "Antonietta Di Dio", "Léa Volonterio", "Elba Xheladini", "-", "Aurélie Volet", "Loic (copain de Sylvie)", "Quentin (copain de Diana)", "Pierrick Niderhauser", "Viviane Crevoisier", "Elyo Gajo", "Valentina (enfant de Stefano et Claudia)", "Leandro Martinez", "Santiago Martinez", "Julie (enfant de Leticia et Nick)", "Aquilian (enfant de Noemi et Elba)", "Jade (enfant de Matthieu et Aurelie)"
       ],
       responses: [],
       selectedName: "",
@@ -85,7 +89,8 @@ export default {
         attending: "no",
         ceremonie: false,
         repas: false,
-        menu: "standard",
+        noViande: false,
+        noPoisson: false,
         allergies: "",
         affiliation: "",
         customMessage: ""
@@ -121,7 +126,7 @@ export default {
 
         this.status = `✅ Merci, ${this.selectedName}`
 
-        const successMessage = `✅ Merci ${this.selectedName} ! ta réponse a bien été enregistrée !`
+        const successMessage = `✅ Merci ${this.selectedName} ! Ta réponse a bien été enregistrée !`
         this.$router.push({ path: "/", query: { message: successMessage } })
 
         this.selectedName = ""
@@ -130,7 +135,8 @@ export default {
           attending: "no",
           ceremonie: false,
           repas: false,
-          menu: "standard",
+          noViande: false,
+          noPoisson: false,
           allergies: "",
           affiliation: "",
           customMessage: ""
@@ -154,7 +160,8 @@ export default {
           attending: "no",
           ceremonie: false,
           repas: false,
-          menu: "standard",
+          noViande: false,
+          noPoisson: false,
           allergies: "",
           affiliation: "",
           customMessage: ""
@@ -168,7 +175,8 @@ export default {
         attending: guest.attending || "no",
         ceremonie: !!guest.ceremonie,
         repas: !!guest.repas,
-        menu: guest.menu || "standard",
+        noViande: guest.noViande,
+        noPoisson: guest.noPoisson,
         allergies: guest.allergies || "",
         affiliation: guest.affiliation || "",
         customMessage: guest.customMessage || ""

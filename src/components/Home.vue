@@ -16,7 +16,7 @@
 
 <script>
 import Carousel from './Carousel.vue';
-import IMG3952 from '../assets/IMG_3952.jpg';
+// import IMG3952 from '../assets/IMG_3952.jpg';
 import IMG3977 from '../assets/IMG_3977.jpg';
 import IMG3991 from '../assets/IMG_3991.jpg';
 import IMG3995 from '../assets/IMG_3995.jpg';
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       carouselImages: [
-         IMG3952,
+        //  IMG3952,
           IMG3977,
           IMG3991,
           IMG3995,
