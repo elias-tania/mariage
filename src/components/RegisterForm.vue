@@ -1,18 +1,14 @@
 <template>
-  <form class="form" @submit.prevent="handleSubmit">
+  <form class="form" @submit.prevent="handleSubmit" @keydown.enter.prevent>
     <!-- Sélection du nom -->
     <label>
       Nom
-      <input
-        type="text"
+      <ComboBox
         v-model="selectedName"
-        list="participants-list"
-        @input="fetchByName"
-        required
+        :options="participants"
+        placeholder="Entrez votre nom"
+        @update:modelValue="fetchByName"
       />
-      <datalist id="participants-list">
-        <option v-for="p in participants" :key="p" :value="p"></option>
-      </datalist>
     </label>
 
     <label>
@@ -70,8 +66,11 @@
 </template>
 
 <script>
+import ComboBox from "./ComboBox.vue"
+
 export default {
   name: "RegisterForm",
+  components: { ComboBox },
   data() {
     return {
       participants: [
